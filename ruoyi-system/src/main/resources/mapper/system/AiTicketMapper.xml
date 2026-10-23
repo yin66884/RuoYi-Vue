@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.system.mapper.AiTicketMapper">
+
+    <resultMap id="AiTicketResult"
+               type="com.ruoyi.system.domain.AiTicket">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="status" column="status"/>
+        <result property="priority" column="priority"/>
+        <result property="aiSummary" column="ai_summary"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectAiTicketList" resultMap="AiTicketResult">
+        SELECT id, title, content, status, priority,
+        ai_summary, create_time, update_time
+        FROM ai_ticket
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insertAiTicket"
+            parameterType="com.ruoyi.system.domain.AiTicket"
+            useGeneratedKeys="true"
+            keyProperty="id">
+
+        INSERT INTO ai_ticket
+        (title, content, status, priority)
+        VALUES
+        (#{title}, #{content}, #{status}, #{priority})
+
+    </insert>
+
+    <update id="updateAiTicket"
+            parameterType="com.ruoyi.system.domain.AiTicket">
+
+        UPDATE ai_ticket
+        SET
+        title = #{title},
+        content = #{content},
+        status = #{status},
+        priority = #{priority},
+        update_time = NOW()
+        WHERE id = #{id}
+
+    </update>
+
+    <delete id="deleteAiTicketById">
+        DELETE FROM ai_ticket
+        WHERE id = #{id}
+    </delete>
+
+</mapper>
