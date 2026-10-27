@@ -15,12 +15,15 @@
         <result property="aiSummary" column="ai_summary"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="aiCategory" column="ai_category"/>
+        <result property="aiPriority" column="ai_priority"/>
+        <result property="aiCause" column="ai_cause"/>
+        <result property="aiSuggestion" column="ai_suggestion"/>
     </resultMap>
 
     <select id="selectAiTicketList" resultMap="AiTicketResult">
-        SELECT id, title, content, status, priority,
-        ai_summary, create_time, update_time
-        FROM ai_ticket
+        SELECT     id, title, content, status, priority, ai_summary, ai_category,
+        ai_priority, ai_cause, ai_suggestion, create_time, update_time FROM ai_ticket
         ORDER BY id DESC
     </select>
 
@@ -55,4 +58,62 @@
         WHERE id = #{id}
     </delete>
 
+    <select id="selectAiTicketById" resultMap="AiTicketResult">
+        SELECT id, title, content, status, priority,
+        ai_summary, ai_category, ai_priority, ai_cause, ai_suggestion,
+        create_time, update_time
+        FROM ai_ticket
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateAiSummary">
+        UPDATE ai_ticket
+        SET ai_summary = #{aiSummary},
+        update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAiAnalysis">
+        UPDATE ai_ticket
+        SET
+        ai_summary = #{analysis.summary},
+        ai_category = #{analysis.category},
+        ai_priority = #{analysis.priority},
+        ai_cause = #{analysis.cause},
+        ai_suggestion = #{analysis.suggestion},
+        update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 列表与计数复用条件，确保 total 对应同一组筛选条件。 -->
+    <sql id="AgentTicketConditions">
+        <where>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="priority != null">
+                AND priority = #{priority}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countTicketsForAgent" resultType="long">
+        SELECT COUNT(*) FROM ai_ticket
+        <include refid="AgentTicketConditions"/>
+    </select>
+
+    <!-- 参数由 Java 校验，SQL 始终通过 #{} 绑定。 -->
+    <select id="selectTicketsForAgent"
+            resultMap="AiTicketResult">
+
+        SELECT
+        id, title, status, priority,
+        ai_summary, ai_category, ai_priority
+        FROM ai_ticket
+
+        <include refid="AgentTicketConditions"/>
+
+        ORDER BY id DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
 </mapper>

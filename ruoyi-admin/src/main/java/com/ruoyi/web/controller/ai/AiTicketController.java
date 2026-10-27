@@ -73,6 +73,19 @@ public class AiTicketController extends BaseController {
         return toAjax(aiTicketService.deleteAiTicketById(id));
     }
 
+    @PreAuthorize("@ss.hasRole('admin')")
+    @PostMapping("/{id}/analyze")
+    public AjaxResult analyze(@PathVariable("id") Long id) {
+
+        try {
+            String summary = aiTicketService.analyzeAiTicket(id);
+
+            return AjaxResult.success(summary);
+
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            return AjaxResult.error(e.getMessage());
+        }
+    }
 }
 
 

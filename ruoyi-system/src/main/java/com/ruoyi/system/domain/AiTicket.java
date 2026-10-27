@@ -18,6 +18,11 @@ public class AiTicket extends BaseEntity {
 
     private String aiSummary;
 
+    private String aiCategory;
+    private String aiPriority;
+    private String aiCause;
+    private String aiSuggestion;
+
     public Long getId() {
         return id;
     }
@@ -64,5 +69,37 @@ public class AiTicket extends BaseEntity {
 
     public void setAiSummary(String aiSummary) {
         this.aiSummary = aiSummary;
+    }
+
+    public String getAiCategory() {
+        return aiCategory;
+    }
+
+    public void setAiCategory(String aiCategory) {
+        this.aiCategory = aiCategory;
+    }
+
+    public String getAiPriority() {
+        return aiPriority;
+    }
+
+    public void setAiPriority(String aiPriority) {
+        this.aiPriority = aiPriority;
+    }
+
+    public String getAiCause() {
+        return aiCause;
+    }
+
+    public void setAiCause(String aiCause) {
+        this.aiCause = aiCause;
+    }
+
+    public String getAiSuggestion() {
+        return aiSuggestion;
+    }
+
+    public void setAiSuggestion(String aiSuggestion) {
+        this.aiSuggestion = aiSuggestion;
     }
 }

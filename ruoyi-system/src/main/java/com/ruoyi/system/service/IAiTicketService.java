@@ -14,4 +14,6 @@ public interface IAiTicketService {
 
     // 删除工单
     int deleteAiTicketById(Long id);
+
+    String analyzeAiTicket(Long id);
 }
